@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ERP للحفلات | Event Nexus ERP</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">E</div>
+      <span>إيفينت نكسس ERP</span>
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-item active" data-view="dashboard">
+        <a href="#dashboard">
+          <span class="nav-icon">📊</span>
+          <span>لوحة التحكم العامة</span>
+        </a>
+      </li>
+      <li class="nav-item" data-view="eventsheets">
+        <a href="#eventsheets">
+          <span class="nav-icon">📋</span>
+          <span>شيت التكاليف والأرباح</span>
+        </a>
+      </li>
+      <li class="nav-item" data-view="ledger">
+        <a href="#ledger">
+          <span class="nav-icon">💸</span>
+          <span>دفتر الحسابات والقيود</span>
+        </a>
+      </li>
+      <li class="nav-item" data-view="addpetty">
+        <a href="#addpetty">
+          <span class="nav-icon">💵</span>
+          <span>سحب مصروفات ونثرية</span>
+        </a>
+      </li>
+      <li class="nav-item" data-view="pettylog">
+        <a href="#pettylog">
+          <span class="nav-icon">🧾</span>
+          <span>سجل سحب المصروفات والنثرية</span>
+        </a>
+      </li>
+      <li class="nav-item" data-view="operations">
+        <a href="#operations">
+          <span class="nav-icon">🤝</span>
+          <span>المهام وفريق العمل والموردين</span>
+        </a>
+      </li>
+      <li class="nav-item" data-view="warehouse">
+        <a href="#warehouse">
+          <span class="nav-icon">📦</span>
+          <span>المخزن وتأجير الأصول</span>
+        </a>
+      </li>
+    </ul>
+    <div class="sidebar-footer">
+      <span>نظام إيفينت نكسس v2.0</span>
+    </div>
+  </aside>
+
+  <!-- Main View Container -->
+  <main class="main-content">
+    <header>
+      <div class="page-title" id="page-current-title">لوحة التحكم العامة</div>
+      <div class="header-actions">
+        <button class="btn btn-primary" id="btn-global-new-event">
+          <span>➕</span> حجز فعالية جديدة
+        </button>
+        <button class="btn btn-secondary" id="btn-global-new-transaction">
+          <span>💸</span> تسجيل حركة مالية
+        </button>
+        <div class="user-profile">
+          <div class="avatar">EV</div>
+          <span>منظم الحفلات العام</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      
+      <!-- VIEW 1: DASHBOARD -->
+      <section id="view-dashboard" class="view-section active">
+        <!-- Stat Cards -->
+        <div class="stats-grid">
+          <div class="card card-glowing">
+            <div class="stat-label">
+              <span>إجمالي العقود (الإيرادات المتوقعة)</span>
+              <span class="stat-icon icon-blue">💰</span>
+            </div>
+            <div class="stat-value" id="dash-total-revenue">0 EGP</div>
+            <div class="stat-sub">إجمالي قيمة الفعاليات المحجوزة</div>
+          </div>
+          <div class="card card-glowing">
+            <div class="stat-label">
+              <span>المنصرف الفعلي والمصاريف</span>
+              <span class="stat-icon icon-purple">📉</span>
+            </div>
+            <div class="stat-value" id="dash-total-spent">0 EGP</div>
+            <div class="stat-sub" id="dash-spent-pct">0% من الإيرادات الكلية</div>
+          </div>
+          <div class="card card-glowing">
+            <div class="stat-label">
+              <span>صافي الأرباح التشغيلية</span>
+              <span class="stat-icon icon-green">🏆</span>
+            </div>
+            <div class="stat-value" id="dash-total-profits">0 EGP</div>
+            <div class="stat-sub" id="dash-profit-margin">هامش ربح: 0%</div>
+          </div>
+          <div class="card card-glowing">
+            <div class="stat-label">
+              <span>أصول خارج المخزن (إيجار)</span>
+              <span class="stat-icon icon-amber">⚠️</span>
+            </div>
+            <div class="stat-value" id="dash-out-assets">0 قطعة</div>
+            <div class="stat-sub">قيد الاستخدام في الحفلات حالياً</div>
+          </div>
+        </div>
+
+        <!-- Charts Layout Split -->
+        <div class="dashboard-layout">
+          <!-- Main Chart Card -->
+          <div class="card">
+            <div class="panel-header">
+              <h3 class="panel-title">قيمة العقد مقابل إجمالي التكاليف لكل فعالية</h3>
+              <div style="font-size: 11px; display: flex; gap: 10px;">
+                <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: #404040; display: inline-block;"></span> قيمة التعاقد</span>
+                <span style="display: inline-flex; align-items: center; gap: 4px;"><span style="width: 10px; height: 10px; background: var(--accent-primary); display: inline-block;"></span> إجمالي التكاليف</span>
+              </div>
+            </div>
+            <div class="chart-container" id="event-bar-chart">
+              <!-- Rendered Dynamically in app.js -->
+            </div>
+          </div>
+
+          <!-- Quick Activity / Recent Transactions -->
+          <div class="card">
+            <div class="panel-header">
+              <h3 class="panel-title">أحدث القيود المالية المسجلة</h3>
+            </div>
+            <div class="list-items" id="dash-recent-transactions">
+              <!-- Rendered Dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Events Overview Table Card -->
+        <div class="card">
+          <div class="panel-header">
+            <h3 class="panel-title">الحالة التشغيلية والمالية للفعاليات الحالية</h3>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>اسم الفعالية / العميل</th>
+                  <th>تاريخ الحفلة</th>
+                  <th>قيمة العقد</th>
+                  <th>التكاليف الفعلية</th>
+                  <th>نسبة إنجاز المهام</th>
+                  <th>صافي الربح المتوقع</th>
+                  <th>خيارات</th>
+                </tr>
+              </thead>
+              <tbody id="events-table-body">
+                <!-- Rendered Dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 2: EVENT SHEETS -->
+      <section id="view-eventsheets" class="view-section">
+        <div class="project-selector-bar">
+          <div class="form-group" style="margin-bottom: 0; width: 320px;">
+            <label class="form-label" for="sheet-event-select">اختر الحفلة أو الفعالية لعرض التحليلات:</label>
+            <select class="form-control" id="sheet-event-select">
+              <!-- Events Options Rendered Dynamically -->
+            </select>
+          </div>
+          <div style="display: flex; gap: 12px;">
+            <button class="btn btn-secondary btn-sm" id="btn-export-sheet">📤 تصدير البيانات (CSV)</button>
+            <button class="btn btn-secondary btn-sm" id="btn-import-sheet" style="background-color: #f3f4f6; color: var(--text-primary); border: 1px solid var(--border-color);">📥 استيراد البيانات (CSV)</button>
+            <input type="file" id="file-import-sheet" accept=".csv" style="display: none;">
+            <button class="btn btn-primary btn-sm" id="btn-update-budgets">⚙️ تعديل ميزانيات البنود</button>
+          </div>
+        </div>
+
+        <!-- Event Details Card -->
+        <div class="card" style="margin-bottom: 24px; padding: 20px;">
+          <div class="panel-header" style="margin-bottom: 12px;">
+            <h3 class="panel-title" id="sheet-info-event-name" style="font-size: 20px;">اسم الحفلة</h3>
+            <span class="badge badge-success" id="sheet-info-status">قيد التخطيط</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; font-size: 14px;">
+            <div>👤 <strong>العميل:</strong> <span id="sheet-info-client">-</span></div>
+            <div>📞 <strong>رقم الاتصال:</strong> <span id="sheet-info-phone">-</span></div>
+            <div>📅 <strong>التاريخ المحدد:</strong> <span id="sheet-info-date">-</span></div>
+            <div>📍 <strong>قاعة المناسبة / العنوان:</strong> <span id="sheet-info-venue">-</span></div>
+            <div>👥 <strong>عدد المعازيم/الحضور:</strong> <span id="sheet-info-guests">0 فرد</span></div>
+          </div>
+        </div>
+
+        <!-- Event Sheet Financial Stats Grid -->
+        <div class="cost-sheet-summary-grid">
+          <div class="card">
+            <div class="stat-label">إيراد العقد الكلي</div>
+            <div class="stat-value" id="sheet-event-revenue" style="color: var(--accent-primary);">0 EGP</div>
+            <div class="stat-sub" id="sheet-event-paid">المحصل: 0 EGP</div>
+            <div class="stat-sub" id="sheet-event-pending" style="margin-top: 4px; font-weight: 600;">المتبقي للتحصيل: 0 EGP</div>
+          </div>
+          <div class="card">
+            <div class="stat-label">إجمالي تكاليف التنفيذ</div>
+            <div class="stat-value" id="sheet-event-spent" style="color: var(--accent-danger);">0 EGP</div>
+            <div class="stat-sub">الفواتير وأجور العمال والموردين</div>
+          </div>
+          <div class="card">
+            <div class="stat-label">صافي الربح الفعلي المقدر</div>
+            <div class="stat-value" id="sheet-event-profit">0 EGP</div>
+            <div class="stat-sub" id="sheet-event-margin">هامش ربح: 0%</div>
+          </div>
+        </div>
+
+        <!-- Cost breakdown category grid -->
+        <div class="cost-category-grid" id="event-categories-container">
+          <!-- Categories Budgets & Spent Rendered Dynamically -->
+        </div>
+
+        <!-- Itemized lists of financial transactions (both client receipts and supplier expenses) -->
+        <div class="card" style="margin-top: 32px;">
+          <div class="panel-header">
+            <h3 class="panel-title">كشف الحساب المالي المخصص للفعالية (إيرادات ومصاريف)</h3>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>التاريخ</th>
+                  <th>نوع العملية</th>
+                  <th>البند / القسم</th>
+                  <th>الشرح والبيان</th>
+                  <th>القيمة (EGP)</th>
+                  <th>خيارات</th>
+                </tr>
+              </thead>
+              <tbody id="event-ledger-table-body">
+                <!-- Rendered Dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 3: LEDGER (حسابات وقيود عامة) -->
+      <section id="view-ledger" class="view-section">
+        <div class="dashboard-layout">
+          <!-- Form Card -->
+          <div class="card">
+            <div class="panel-header">
+              <h3 class="panel-title">تسجيل حركة مالية جديدة</h3>
+            </div>
+            <form id="form-add-transaction">
+              <div class="form-group">
+                <label class="form-label" for="tx-event">الفعالية أو الحفلة المستهدفة</label>
+                <select class="form-control" id="tx-event" required>
+                  <!-- Options Dynamically Rendered -->
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="tx-type">نوع العملية</label>
+                <select class="form-control" id="tx-type" required>
+                  <option value="expense">مصروف تنفيذ (صرف خارجي / أجور / موردين)</option>
+                  <option value="revenue">دفعة مستلمة من العميل (إيراد وقبض)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="tx-category">البند المالي المخصص</label>
+                <select class="form-control" id="tx-category" required>
+                  <option value="ClientPayment">دفعة العميل المستلمة (خاص بالإيرادات فقط)</option>
+                  <option value="Materials">شراء خامات ومستلزمات الحفلة (Materials)</option>
+                  <option value="Labor">أجور المنظمين والعمال المباشرة (Labor)</option>
+                  <option value="Equipment">إيجار أو أجور معدات خارجية (Equipment)</option>
+                  <option value="Logistics">النقل، الشحن، والضيافة (Logistics)</option>
+                  <option value="Overheads">حجز القاعات وقدرات تنظيمية إضافية (Overheads)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="tx-amount">المبلغ المالي (EGP)</label>
+                <input type="number" step="0.01" class="form-control" id="tx-amount" placeholder="0.00" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="tx-date">تاريخ الحركة</label>
+                <input type="date" class="form-control" id="tx-date" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="tx-description">البيان والشرح التفصيلي</label>
+                <textarea class="form-control" id="tx-description" rows="3" placeholder="اكتب تفاصيل العملية بالكامل (اسم العميل أو المورد، الكمية المتفق عليها، طريقة الدفع)..." required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%;">💾 حفظ المعاملة المالية وتحديث السيستم</button>
+            </form>
+          </div>
+
+          <!-- Transaction List Panel -->
+          <div class="card" style="display: flex; flex-direction: column;">
+            <div class="panel-header">
+              <h3 class="panel-title">دفتر القيود والمعاملات العام</h3>
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" id="tx-search-input" placeholder="🔍 بحث في المعاملات (المناسبة، الشرح، نوع المعاملة)...">
+            </div>
+            <div class="table-wrapper" style="flex: 1;">
+              <table>
+                <thead>
+                  <tr>
+                    <th>المناسبة</th>
+                    <th>نوع الحركة</th>
+                    <th>البند</th>
+                    <th>القيمة</th>
+                    <th>التاريخ</th>
+                    <th>التفاصيل</th>
+                    <th>إجراء</th>
+                  </tr>
+                </thead>
+                <tbody id="all-tx-table-body">
+                  <!-- Rendered Dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 4: OPERATIONS PANEL (المهام، فريق العمل، الموردين) -->
+      <section id="view-operations" class="view-section">
+        <!-- Sub-navigation -->
+        <div class="sub-tabs-container">
+          <button class="sub-tab-btn active" data-sub="tasks">📋 قائمة مهام تنظيم الحفلات</button>
+          <button class="sub-tab-btn" data-sub="vendors">🤝 دليل الموردين ومزودي الخدمات</button>
+          <button class="sub-tab-btn" data-sub="crew">👷 فريق العمل والمنظمين (Crew)</button>
+        </div>
+
+        <!-- Sub-view 1: EVENT TASKS CHECKLIST -->
+        <div id="sub-view-tasks" class="sub-view-section active">
+          <div class="project-selector-bar">
+            <div class="form-group" style="margin-bottom: 0; width: 320px;">
+              <label class="form-label" for="task-event-select">اختر المناسبة لعرض وتعديل المهام:</label>
+              <select class="form-control" id="task-event-select">
+                <!-- Events options dynamically -->
+              </select>
+            </div>
+            <button class="btn btn-primary btn-sm" id="btn-add-task">➕ إضافة مهمة جديدة للحفلة</button>
+          </div>
+          
+          <div class="card">
+            <div class="panel-header">
+              <h3 class="panel-title">قائمة مهام التنسيق والتنفيذ المخصصة للفعالية</h3>
+              <div style="font-size: 13px; color: var(--text-secondary);" id="event-task-completion-stats">
+                مكتمل: 0 من 0 (0%)
+              </div>
+            </div>
+            <div class="task-list" id="event-tasks-container">
+              <!-- Rendered Dynamically -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub-view 2: VENDORS DIRECTORY -->
+        <div id="sub-view-vendors" class="sub-view-section">
+          <div class="panel-header">
+            <h3 class="panel-title">دليل الموردين وشركاء تنظيم الحفلات الموثقين</h3>
+            <button class="btn btn-primary btn-sm" id="btn-add-vendor">➕ تسجيل مورد جديد</button>
+          </div>
+          <div class="card">
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>اسم المورد</th>
+                    <th>نوع الخدمة الموردة</th>
+                    <th>رقم الهاتف للتواصل</th>
+                    <th>إجمالي المعاملات</th>
+                    <th>خيارات</th>
+                  </tr>
+                </thead>
+                <tbody id="vendors-table-body">
+                  <!-- Rendered Dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub-view 3: CREW & STAFFING -->
+        <div id="sub-view-crew" class="sub-view-section">
+          <div class="panel-header">
+            <h3 class="panel-title">قائمة المنظمين والمشرفين والمضيفين (Staff & Crew)</h3>
+            <button class="btn btn-primary btn-sm" id="btn-add-crew">➕ إضافة منظم/مضيف جديد</button>
+          </div>
+          <div class="card">
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>اسم المنظم</th>
+                    <th>الدور الوظيفي المعتمد</th>
+                    <th>اليومية المقدرة</th>
+                    <th>رقم الهاتف</th>
+                    <th>الفعالية المسندة حالياً</th>
+                    <th>خيارات</th>
+                  </tr>
+                </thead>
+                <tbody id="crew-table-body">
+                  <!-- Rendered Dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 5: WAREHOUSE & ASSETS RENTALS -->
+      <section id="view-warehouse" class="view-section">
+        <!-- Sub-navigation -->
+        <div class="sub-tabs-container">
+          <button class="sub-tab-btn active" data-sub="inv-list">📦 جرد مستلزمات ومستهلكات الحفلات</button>
+          <button class="sub-tab-btn" data-sub="rental-assets">🛋️ أصول ومعدات للإيجار والاستخدام المتكرر</button>
+          <button class="sub-tab-btn" data-sub="asset-allocations">🚚 تتبع حركة الأصول وصرفها للفعاليات</button>
+        </div>
+
+        <!-- Sub-view 1: CONSUMABLE INVENTORY -->
+        <div id="sub-view-inv-list" class="sub-view-section active">
+          <div class="panel-header">
+            <h3 class="panel-title">حصر مستلزمات الحفلات غير القابلة للاسترجاع (المستهلكات)</h3>
+            <button class="btn btn-primary btn-sm" id="btn-add-consumable">➕ إضافة صنف مستهلك جديد</button>
+          </div>
+          <div class="card">
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>اسم الصنف</th>
+                    <th>الكود / SKU</th>
+                    <th>الكمية المتاحة</th>
+                    <th>تكلفة الوحدة</th>
+                    <th>القيمة المالية الإجمالية</th>
+                    <th>حالة المخزون</th>
+                    <th>إجراء</th>
+                  </tr>
+                </thead>
+                <tbody id="consumable-inventory-tbody">
+                  <!-- Rendered Dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub-view 2: RENTABLE ASSETS -->
+        <div id="sub-view-rental-assets" class="sub-view-section">
+          <div class="panel-header">
+            <h3 class="panel-title">الأصول والديكورات والأجهزة المملوكة للشركة القابلة للإيجار والاستخدام المتكرر</h3>
+            <button class="btn btn-primary btn-sm" id="btn-add-rental-asset">➕ إضافة أصل إيجاري جديد</button>
+          </div>
+          <div class="card">
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>اسم الأصل / القطعة</th>
+                    <th>إجمالي الأصول بالمخزن</th>
+                    <th>الكمية المعارة للخارج (المستأجرة)</th>
+                    <th>الكمية المتاحة حالياً</th>
+                    <th>سعر تكلفة الاستخدام المقدر للوحدة</th>
+                    <th>قيمة الأصول الكلية</th>
+                    <th>خيارات</th>
+                  </tr>
+                </thead>
+                <tbody id="rental-assets-tbody">
+                  <!-- Rendered Dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sub-view 3: ASSET ALLOCATIONS & RETURNS TRACKER -->
+        <div id="sub-view-asset-allocations" class="sub-view-section">
+          <div class="panel-header">
+            <h3 class="panel-title">سجل صرف الأصول والمعدات للمناسبات وتتبع عودتها للمخزن</h3>
+            <button class="btn btn-primary btn-sm" id="btn-deploy-rental-asset">📤 صرف معدات/أصول لحفلة</button>
+          </div>
+          <div class="card">
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>المناسبة</th>
+                    <th>الأصل المنصرف</th>
+                    <th>الكمية الصادرة</th>
+                    <th>تاريخ الصرف</th>
+                    <th>تاريخ الإرجاع المتوقع</th>
+                    <th>حالة الإرجاع</th>
+                    <th>خيارات</th>
+                  </tr>
+                </thead>
+                <tbody id="asset-allocations-tbody">
+                  <!-- Rendered Dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+
+      <!-- VIEW 6: ADD PETTY CASH (تسجيل سحب مصروفات نثرية) -->
+      <section id="view-addpetty" class="view-section">
+        <div style="max-width: 600px; margin: 0 auto;">
+          <div class="card">
+            <div class="panel-header">
+              <h3 class="panel-title">تسجيل سحب مصروفات نثرية جديدة بصورة</h3>
+            </div>
+            <form id="form-add-pettycash">
+              <div class="form-group">
+                <label class="form-label" for="petty-event">الفعالية أو الحفلة المستهدفة</label>
+                <select class="form-control" id="petty-event" required>
+                  <!-- Options Dynamically Rendered -->
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="petty-category">نوع المصروف</label>
+                <select class="form-control" id="petty-category" required>
+                  <option value="Logistics">انتقالات وأوبر (Logistics)</option>
+                  <option value="Materials">شراء خامات عاجلة (Materials)</option>
+                  <option value="Labor">بقشيش وعمالة مؤقتة (Labor)</option>
+                  <option value="Overheads">ضيافة ومأكولات طارئة (Overheads)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="petty-amount">المبلغ المصروف (EGP)</label>
+                <input type="number" step="0.01" class="form-control" id="petty-amount" placeholder="0.00" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="petty-date">تاريخ الصرف</label>
+                <input type="date" class="form-control" id="petty-date" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="petty-description">البيان والشرح</label>
+                <input type="text" class="form-control" id="petty-description" placeholder="مثال: أوبر لنقل مصمم الورد، شراء شريط لاصق عاجل..." required>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="petty-image">إرفاق صورة الفاتورة / إيصال الصرف <span style="color: var(--accent-danger);">*</span></label>
+                <div class="file-upload-wrapper" style="position: relative; display: flex; flex-direction: column; gap: 8px;">
+                  <input type="file" id="petty-image" accept="image/*" class="form-control" required style="padding: 6px 12px;">
+                  <div id="petty-image-preview" style="display: none; max-width: 100%; height: 120px; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); background: #F8FAFC;">
+                    <img id="petty-img-preview-tag" src="" style="width: 100%; height: 100%; object-fit: contain;">
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary" style="width: 100%;">💾 تسجيل الصرف وحفظ الصورة</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- VIEW 7: PETTY CASH LOG (سجل سحب المصروفات والنثرية) -->
+      <section id="view-pettylog" class="view-section">
+        <!-- Stat Cards -->
+        <div class="stats-grid">
+          <div class="card card-glowing">
+            <div class="stat-label">
+              <span>إجمالي السحوبات النثرية</span>
+              <span class="stat-icon icon-blue">🧾</span>
+            </div>
+            <div class="stat-value" id="petty-total-spent">0 EGP</div>
+            <div class="stat-sub">المصروفات النثرية اليومية المسجلة</div>
+          </div>
+          <div class="card card-glowing">
+            <div class="stat-label">
+              <span>مصاريف النقل والانتقالات</span>
+              <span class="stat-icon icon-purple">🚗</span>
+            </div>
+            <div class="stat-value" id="petty-total-transport">0 EGP</div>
+            <div class="stat-sub">حسابات أوبر وتوصيل المعدات</div>
+          </div>
+          <div class="card card-glowing">
+            <div class="stat-label">
+              <span>الفواتير المرفقة بصورة</span>
+              <span class="stat-icon icon-green">📸</span>
+            </div>
+            <div class="stat-value" id="petty-receipts-count">0 إيصال</div>
+            <div class="stat-sub">من إجمالي المصروفات النثرية</div>
+          </div>
+        </div>
+
+        <!-- List Panel (Full Width) -->
+        <div class="card" style="display: flex; flex-direction: column; margin-top: 24px;">
+          <div class="panel-header">
+            <h3 class="panel-title">سجل المصروفات النثرية وإيصالات الدفع</h3>
+          </div>
+          <div class="flex-between" style="gap: 16px; margin-bottom: 16px; flex-wrap: wrap;">
+            <div class="form-group" style="margin-bottom: 0; flex: 1; min-width: 250px;">
+              <input type="text" class="form-control" id="petty-search-input" placeholder="🔍 بحث بالبيان أو نوع المصروف...">
+            </div>
+            <div class="form-group" style="margin-bottom: 0; width: 320px;">
+              <select class="form-control" id="petty-filter-event">
+                <option value="">📂 عرض جميع الفعاليات / الحفلات</option>
+                <!-- Rendered Dynamically -->
+              </select>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>المناسبة</th>
+                  <th>النوع</th>
+                  <th>التاريخ</th>
+                  <th>البيان</th>
+                  <th>المبلغ</th>
+                  <th>الفاتورة</th>
+                  <th>إجراء</th>
+                </tr>
+              </thead>
+              <tbody id="petty-table-body">
+                <!-- Rendered Dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- MODAL: CREATE EVENT (حجز حفلة جديدة) -->
+  <div class="modal-overlay" id="modal-event">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 class="modal-title">حجز وتسجيل فعالية جديدة</h4>
+        <button class="modal-close" onclick="closeModal('modal-event')">&times;</button>
+      </div>
+      <form id="form-add-event">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="ev-name">اسم المناسبة / الفعالية</label>
+            <input type="text" class="form-control" id="ev-name" placeholder="مثال: حفل زفاف عميل أ، مؤتمر شركة تك السنوي..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ev-client">اسم العميل المتعاقد</label>
+            <input type="text" class="form-control" id="ev-client" placeholder="مثال: أحمد محمد علي" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ev-phone">رقم هاتف التواصل للعميل</label>
+            <input type="text" class="form-control" id="ev-phone" placeholder="مثال: 01012345678" required>
+          </div>
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label class="form-label" for="ev-date">تاريخ المناسبة المحدد</label>
+              <input type="date" class="form-control" id="ev-date" required>
+            </div>
+            <div>
+              <label class="form-label" for="ev-guests">عدد الحضور / المعازيم المقدر</label>
+              <input type="number" min="1" class="form-control" id="ev-guests" placeholder="150" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ev-venue">مكان المناسبة (اسم القاعة أو الفندق)</label>
+            <input type="text" class="form-control" id="ev-venue" placeholder="مثال: قاعة النيل بفندق فورسيزونز، نادي المهندسين..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="ev-revenue">القيمة الإجمالية المتفق عليها مع العميل بالعقد (EGP)</label>
+            <input type="number" min="0" step="500" class="form-control" id="ev-revenue" placeholder="0.00" required>
+          </div>
+          <p style="font-size: 11px; color: var(--text-secondary); line-height: 1.4;">
+            * ملاحظة: سيقوم النظام افتراضياً بحجز ميزانية تقديرية للمصاريف بنسبة 60% من قيمة العقد، موزعة بنسب متساوية على المواد والعمالة والأجهزة والنقل. يمكنك إعادة ضبطها بحرية من صفحة شيت التكاليف لاحقاً.
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-event')">إلغاء</button>
+          <button type="submit" class="btn btn-primary">💾 تأكيد حجز الفعالية</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD TASK (إضافة مهمة لتنظيم الحفلة) -->
+  <div class="modal-overlay" id="modal-add-task">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 class="modal-title">إضافة مهمة تنظيمية للحفلة</h4>
+        <button class="modal-close" onclick="closeModal('modal-add-task')">&times;</button>
+      </div>
+      <form id="form-add-task">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="task-title">اسم المهمة بالتفصيل</label>
+            <input type="text" class="form-control" id="task-title" placeholder="مثال: حجز بوفيه العشاء، تركيب الإضاءة الأمامية..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="task-category">بند المهمة</label>
+            <select class="form-control" id="task-category" required>
+              <option value="Catering">التغذية والبوفيه (Catering)</option>
+              <option value="Decor">الديكورات والورد والكراسي (Decor)</option>
+              <option value="SoundLight">الصوت والضوء والمسرح (Sound & Light)</option>
+              <option value="Staffing">حجز المنظمين وفريق الضيافة (Staffing)</option>
+              <option value="Logistics">التجهيز والنقل والتساريح (Logistics)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="task-assigned">مسؤول التنفيذ</label>
+            <input type="text" class="form-control" id="task-assigned" placeholder="مثال: محمد المشرف، شركة الإضاءة أ" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-add-task')">إلغاء</button>
+          <button type="submit" class="btn btn-primary">💾 إضافة المهمة</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD VENDOR (إضافة مورد جديد) -->
+  <div class="modal-overlay" id="modal-vendor">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 class="modal-title">تسجيل مورد جديد في النظام</h4>
+        <button class="modal-close" onclick="closeModal('modal-vendor')">&times;</button>
+      </div>
+      <form id="form-add-vendor">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="vendor-name">اسم المورد أو الشركة</label>
+            <input type="text" class="form-control" id="vendor-name" placeholder="مثال: شركة النور للصوت والضوء..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="vendor-service">نوع الخدمة المقدمة</label>
+            <input type="text" class="form-control" id="vendor-service" placeholder="مثال: بوفيه / تصوير فوتوغرافي / مسارح خشبية" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="vendor-phone">رقم الهاتف للتواصل</label>
+            <input type="text" class="form-control" id="vendor-phone" placeholder="مثال: 01198765432" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-vendor')">إلغاء</button>
+          <button type="submit" class="btn btn-primary">💾 حفظ المورد</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD CREW MEMBER (إضافة منظم جديد) -->
+  <div class="modal-overlay" id="modal-crew">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 class="modal-title">تسجيل منظم/مضيف بفريق العمل</h4>
+        <button class="modal-close" onclick="closeModal('modal-crew')">&times;</button>
+      </div>
+      <form id="form-add-crew">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="crew-name">اسم الموظف / المنظم</label>
+            <input type="text" class="form-control" id="crew-name" placeholder="مثال: سارة أحمد، يوسف خالد..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="crew-role">الدور الوظيفي للحفلات</label>
+            <select class="form-control" id="crew-role" required>
+              <option value="Coordinator">منسق الحفل العام (Coordinator)</option>
+              <option value="Hostess">مضيف / مضيفة استقبال (Hostess)</option>
+              <option value="Supervisor">مشرف قاعة المسرح (Supervisor)</option>
+              <option value="SoundEng">مهندس تشغيل صوتيات (Sound Eng)</option>
+            </select>
+          </div>
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label class="form-label" for="crew-rate">اليومية في الحفلة (EGP)</label>
+              <input type="number" min="0" class="form-control" id="crew-rate" placeholder="500" required>
+            </div>
+            <div>
+              <label class="form-label" for="crew-phone">رقم هاتف المنظم</label>
+              <input type="text" class="form-control" id="crew-phone" placeholder="012xxxxxx" required>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-crew')">إلغاء</button>
+          <button type="submit" class="btn btn-primary">💾 تسجيل الموظف</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD CONSUMABLE OR RENTAL ITEM TO WAREHOUSE -->
+  <div class="modal-overlay" id="modal-warehouse-item">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 class="modal-title" id="wh-modal-title">إضافة مادة أو أصل للمخزن</h4>
+        <button class="modal-close" onclick="closeModal('modal-warehouse-item')">&times;</button>
+      </div>
+      <form id="form-wh-item">
+        <input type="hidden" id="wh-item-type"> <!-- consumable or rental -->
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="wh-item-name">اسم المادة / الأصل</label>
+            <input type="text" class="form-control" id="wh-item-name" placeholder="مثال: كراسي نابليون مذهبة، ورد جوري أحمر..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="wh-item-sku">الكود / SKU</label>
+            <input type="text" class="form-control" id="wh-item-sku" placeholder="مثال: NAP-GOLD-CH" required>
+          </div>
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label class="form-label" for="wh-item-qty">الكمية الكلية الافتتاحية</label>
+              <input type="number" min="0" step="0.1" class="form-control" id="wh-item-qty" placeholder="100" required>
+            </div>
+            <div>
+              <label class="form-label" for="wh-item-cost">سعر التكلفة للوحدة (EGP)</label>
+              <input type="number" min="0" step="0.1" class="form-control" id="wh-item-cost" placeholder="150" required>
+            </div>
+          </div>
+          <div class="form-group" id="wh-min-stock-group">
+            <label class="form-label" for="wh-item-min">حد التنبيه بنقص المخزون</label>
+            <input type="number" min="0" class="form-control" id="wh-item-min" placeholder="10">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-warehouse-item')">إلغاء</button>
+          <button type="submit" class="btn btn-primary">💾 إضافة الصنف</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: DEPLOY RENTAL ASSET TO EVENT (صرف أصل لحفلة) -->
+  <div class="modal-overlay" id="modal-deploy-asset">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 class="modal-title">صرف وإعارة أصول ومعدات لحفلة</h4>
+        <button class="modal-close" onclick="closeModal('modal-deploy-asset')">&times;</button>
+      </div>
+      <form id="form-deploy-asset">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="dep-asset">اختر الأصل / المعدة المراد إخراجها</label>
+            <select class="form-control" id="dep-asset" required>
+              <!-- Options Dynamically Rendered -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dep-event">الحفلة / المناسبة المستلمة</label>
+            <select class="form-control" id="dep-event" required>
+              <!-- Options Dynamically Rendered -->
+            </select>
+          </div>
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div>
+              <label class="form-label" for="dep-qty">الكمية الصادرة من المخزن</label>
+              <input type="number" min="1" class="form-control" id="dep-qty" placeholder="50" required>
+            </div>
+            <div>
+              <label class="form-label" for="dep-return-date">تاريخ الإرجاع المتوقع</label>
+              <input type="date" class="form-control" id="dep-return-date" required>
+            </div>
+          </div>
+          <p id="deploy-info" style="font-size: 12px; color: var(--text-secondary); background: var(--bg-input); padding: 8px; border-radius: 6px; margin-bottom: 12px;">
+             رصيد المخازن المتاح: - وحدة | التكلفة التقديرية للاستهلاك: - EGP
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-deploy-asset')">إلغاء</button>
+          <button type="submit" class="btn btn-primary">📤 صرف وتأجير الأصول</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: EDIT CATEGORY BUDGETS (تعديل مخصصات البنود للحفلة) -->
+  <div class="modal-overlay" id="modal-edit-budgets">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 class="modal-title">تعديل ميزانيات البنود والخدمات للفعالية</h4>
+        <button class="modal-close" onclick="closeModal('modal-edit-budgets')">&times;</button>
+      </div>
+      <form id="form-edit-budgets">
+        <input type="hidden" id="budget-edit-event-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" style="font-weight: 600; font-size: 15px;">
+              المناسبة: <span id="budget-edit-event-name">-</span>
+            </label>
+            <div style="font-size: 12px; color: var(--text-secondary);">القيمة الإجمالية للعقد: <span id="budget-edit-event-total">-</span> EGP</div>
+            <div style="font-size: 11px; color: var(--text-muted);">* ملاحظة: يرجى توزيع الميزانية التقديرية للمصاريف على البنود أدناه.</div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="budget-val-Materials">المواد والمستهلكات (Materials) - EGP</label>
+            <input type="number" min="0" class="form-control budget-input-field" id="budget-val-Materials" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="budget-val-Labor">المنظمين والعمالة وأجور فريق العمل (Labor) - EGP</label>
+            <input type="number" min="0" class="form-control budget-input-field" id="budget-val-Labor" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="budget-val-Equipment">معدات وأنظمة الصوت والضوء والمسرح (Equipment) - EGP</label>
+            <input type="number" min="0" class="form-control budget-input-field" id="budget-val-Equipment" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="budget-val-Logistics">النقل والخدمات اللوجستية والضيافة (Logistics) - EGP</label>
+            <input type="number" min="0" class="form-control budget-input-field" id="budget-val-Logistics" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="budget-val-Overheads">حجز الصالات والعموميات (Overheads) - EGP</label>
+            <input type="number" min="0" class="form-control budget-input-field" id="budget-val-Overheads" required>
+          </div>
+          
+          <div id="budget-sum-warning" style="font-size: 12px; color: var(--accent-danger); margin-top: 8px; font-weight: 600;"></div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-edit-budgets')">إلغاء</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-budgets">💾 حفظ ميزانيات البنود</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: QUICK CATEGORY EXPENSE (تسجيل صرف فوري على البند) -->
+  <div class="modal-overlay" id="modal-category-expense">
+    <div class="modal">
+      <div class="modal-header">
+        <h4 class="modal-title">تسجيل مصروف فعلي على بند: <span id="quick-expense-cat-title" style="color: var(--accent-primary);"></span></h4>
+        <button class="modal-close" onclick="closeModal('modal-category-expense')">&times;</button>
+      </div>
+      <form id="form-quick-expense">
+        <input type="hidden" id="quick-expense-cat-key">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">اسم الحفلة الحالية</label>
+            <input type="text" class="form-control" id="quick-expense-event-name" readonly style="background: #F1F5F9; color: var(--text-secondary); font-weight: 600;">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="quick-expense-amount">المبلغ المنصرف (EGP)</label>
+            <input type="number" step="0.01" class="form-control" id="quick-expense-amount" placeholder="0.00" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="quick-expense-date">تاريخ الصرف</label>
+            <input type="date" class="form-control" id="quick-expense-date" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="quick-expense-desc">البيان والشرح (الوصف)</label>
+            <input type="text" class="form-control" id="quick-expense-desc" placeholder="مثال: شراء كوشة ورد، دفعة إيجار صوتيات، إلخ..." required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('modal-category-expense')">إلغاء</button>
+          <button type="submit" class="btn btn-primary">💾 تسجيل المصروف الفعلي</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: RECEIPT LIGHTBOX (عرض صورة الفاتورة) -->
+  <div class="modal-overlay" id="modal-lightbox" style="background-color: rgba(0,0,0,0.85);">
+    <div class="modal" style="max-width: 680px; background: none; border: none; box-shadow: none;">
+      <div style="text-align: left; padding: 10px;">
+        <button class="modal-close" onclick="closeModal('modal-lightbox')" style="color: #fff; font-size: 32px;">&times;</button>
+      </div>
+      <div class="modal-body" style="padding: 0; display: flex; justify-content: center; background: none; max-height: 80vh;">
+        <img id="lightbox-image" src="" style="max-width: 100%; max-height: 70vh; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); object-fit: contain;">
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
