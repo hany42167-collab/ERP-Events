@@ -670,20 +670,20 @@ function renderEventSheets() {
     const isRev = tx.type === 'revenue';
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td style="font-size: 13px;">${tx.date}</td>
-      <td>
+      <td data-label="التاريخ" style="font-size: 13px;">${tx.date}</td>
+      <td data-label="نوع العملية">
         <span class="badge ${isRev ? 'badge-success' : 'badge-danger'}">
           ${isRev ? 'قبض وإيراد' : 'صرف ومصروف'}
         </span>
       </td>
-      <td style="font-weight: 500;">
+      <td data-label="البند / القسم" style="font-weight: 500;">
         ${tx.category === 'ClientPayment' ? 'سداد العميل' : (categoryLabels[tx.category]?.ar || tx.category)}
       </td>
-      <td>${tx.description}</td>
-      <td style="font-weight: 600; color: ${isRev ? 'var(--accent-primary)' : 'var(--accent-danger)'};">
+      <td data-label="الشرح والبيان">${tx.description}</td>
+      <td data-label="القيمة (EGP)" style="font-weight: 600; color: ${isRev ? 'var(--accent-primary)' : 'var(--accent-danger)'};">
         ${isRev ? '+' : '-'}${formatCurrency(tx.amount)}
       </td>
-      <td>
+      <td data-label="خيارات">
         <button class="btn btn-secondary btn-sm" style="color: var(--accent-danger);" onclick="deleteERPTransaction('${tx.id}', 'eventsheets')">🗑️ حذف</button>
       </td>
     `;
@@ -744,21 +744,21 @@ function renderAllLedgerTable(query = '') {
 
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td style="font-weight: 500;" class="clickable-event" onclick="openEventCostSheet('${tx.eventId}')">${evName}</td>
-      <td>
+      <td data-label="المناسبة / الحفلة" style="font-weight: 500;" class="clickable-event" onclick="openEventCostSheet('${tx.eventId}')">${evName}</td>
+      <td data-label="نوع العملية">
         <span class="badge ${isRev ? 'badge-success' : 'badge-danger'}">
           ${isRev ? 'إيراد قبض' : 'صرف تنفيذ'}
         </span>
       </td>
-      <td><span class="badge badge-primary">${catLabels[tx.category] || tx.category}</span></td>
-      <td style="font-weight: 700; color: ${isRev ? 'var(--accent-primary)' : 'var(--accent-danger)'};">
+      <td data-label="البند المالي"><span class="badge badge-primary">${catLabels[tx.category] || tx.category}</span></td>
+      <td data-label="القيمة (EGP)" style="font-weight: 700; color: ${isRev ? 'var(--accent-primary)' : 'var(--accent-danger)'};">
         ${isRev ? '+' : '-'}${formatCurrency(tx.amount)}
       </td>
-      <td style="font-size: 13px;">${tx.date}</td>
-      <td style="max-width: 240px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" title="${tx.description}">
+      <td data-label="التاريخ" style="font-size: 13px;">${tx.date}</td>
+      <td data-label="الشرح والبيان" style="max-width: 240px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" title="${tx.description}">
         ${tx.description}
       </td>
-      <td>
+      <td data-label="خيارات">
         <button class="btn btn-secondary btn-sm" style="color: var(--accent-danger);" onclick="deleteERPTransaction('${tx.id}', 'ledger')">🗑️ حذف</button>
       </td>
     `;
@@ -863,15 +863,15 @@ function renderPettyLog() {
 
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td style="font-weight: 500;" class="clickable-event" onclick="openEventCostSheet('${t.eventId}')">${evName}</td>
-      <td><span class="badge badge-primary">${categoryLabels[t.category] || t.category}</span></td>
-      <td style="font-size: 13px;">${t.date}</td>
-      <td style="max-width: 250px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" title="${t.description}">${t.description}</td>
-      <td style="font-weight: 700; color: var(--accent-danger);">${formatCurrency(t.amount)}</td>
-      <td style="text-align: center;">
+      <td data-label="الفعالية / الحفلة" style="font-weight: 500;" class="clickable-event" onclick="openEventCostSheet('${t.eventId}')">${evName}</td>
+      <td data-label="البند المخصص"><span class="badge badge-primary">${categoryLabels[t.category] || t.category}</span></td>
+      <td data-label="التاريخ" style="font-size: 13px;">${t.date}</td>
+      <td data-label="الشرح والبيان" style="max-width: 250px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" title="${t.description}">${t.description}</td>
+      <td data-label="القيمة (EGP)" style="font-weight: 700; color: var(--accent-danger);">${formatCurrency(t.amount)}</td>
+      <td data-label="الإيصال المصوّر" style="text-align: center;">
         ${t.receiptImage ? `<img src="${t.receiptImage}" class="receipt-thumbnail" onclick="openLightbox('${t.receiptImage}')" title="اضغط لعرض إيصال الصرف">` : `<span class="no-receipt-placeholder">لا توجد صورة</span>`}
       </td>
-      <td>
+      <td data-label="خيارات">
         <button class="btn btn-secondary btn-sm" style="color: var(--accent-danger);" onclick="deleteERPTransaction('${t.id}', 'pettylog')">🗑️ حذف</button>
       </td>
     `;

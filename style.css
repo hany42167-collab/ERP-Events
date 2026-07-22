@@ -570,7 +570,7 @@ th {
   background-color: #FFFFFF;
   color: #000000 !important;
   font-weight: 700;
-  padding: 16px 20px;
+  padding: 12px 14px;
   border-bottom: 1px solid var(--border-color);
   font-size: 12px;
   text-transform: uppercase;
@@ -578,7 +578,7 @@ th {
 }
 
 td {
-  padding: 16px 20px;
+  padding: 12px 14px;
   border-bottom: 1px solid var(--border-color);
   color: var(--text-primary);
 }
@@ -1036,5 +1036,65 @@ select option {
   .system-watermark {
     left: 50%;
     transform: translate(-50%, -50%) rotate(-12deg) scale(0.6);
+  }
+}
+
+/* Responsive Card-Based Tables on Mobile */
+@media (max-width: 768px) {
+  .table-wrapper {
+    border: none;
+    background-color: transparent;
+  }
+
+  .table-wrapper table, 
+  .table-wrapper thead, 
+  .table-wrapper tbody, 
+  .table-wrapper th, 
+  .table-wrapper td, 
+  .table-wrapper tr {
+    display: block;
+    width: 100% !important;
+  }
+
+  /* Hide table headers on mobile */
+  .table-wrapper thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    opacity: 0;
+  }
+
+  .table-wrapper tr {
+    margin-bottom: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background-color: var(--bg-secondary);
+    padding: 12px 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  .table-wrapper td {
+    border: none;
+    border-bottom: 1px solid #1A1A1A;
+    padding: 12px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+    font-size: 13px;
+  }
+
+  .table-wrapper td:last-child {
+    border-bottom: none;
+    padding-bottom: 4px;
+  }
+
+  /* Generate Label using data-label attribute */
+  .table-wrapper td[data-label]::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-left: 12px; /* Margin for spacing in RTL */
+    text-align: right;
   }
 }
