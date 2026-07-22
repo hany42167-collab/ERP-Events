@@ -14,6 +14,38 @@
     <div class="watermark-sub">EVENT PLANNING</div>
   </div>
 
+  <!-- FULLSCREEN LOGIN SCREEN -->
+  <div id="login-screen" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #000000; z-index: 99999; align-items: center; justify-content: center; font-family: 'Outfit', sans-serif;">
+    <div style="width: 100%; max-width: 400px; padding: 40px; background-color: #0D0D0D; border: 1px solid #2D2D2D; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: center;">
+      <!-- Logo -->
+      <div style="margin-bottom: 24px;">
+        <svg viewBox="0 0 24 24" style="width: 48px; height: 48px; fill: none; stroke: #FFFFFF; stroke-width: 2; margin: 0 auto 12px;">
+          <circle cx="12" cy="12" r="10" />
+          <circle cx="12" cy="12" r="6" stroke-width="1.5" />
+          <circle cx="12" cy="12" r="2" fill="#FFFFFF"/>
+        </svg>
+        <h2 style="color: #FFFFFF; font-weight: 800; letter-spacing: 1px; font-size: 24px; margin-bottom: 6px;">TOKENS ERP</h2>
+        <p style="color: #A3A3A3; font-size: 13px; font-weight: 500;">نظام إدارة وتخطيط الحفلات والفعاليات</p>
+      </div>
+      
+      <!-- Login Form -->
+      <form id="form-login" style="text-align: right;">
+        <div class="form-group">
+          <label class="form-label" style="color: #A3A3A3; font-size: 12px;" for="login-username">اسم المستخدم</label>
+          <input type="text" class="form-control" id="login-username" placeholder="أدخل اسم المستخدم..." required style="background-color: #1C1C1C; color: #FFFFFF; border: 1px solid #2D2D2D;">
+        </div>
+        <div class="form-group">
+          <label class="form-label" style="color: #A3A3A3; font-size: 12px;" for="login-password">كلمة المرور</label>
+          <input type="password" class="form-control" id="login-password" placeholder="أدخل كلمة المرور..." required style="background-color: #1C1C1C; color: #FFFFFF; border: 1px solid #2D2D2D;">
+        </div>
+        <div id="login-error-msg" style="color: #EF4444; font-size: 12px; margin-bottom: 16px; text-align: center; display: none; font-weight: 600;">
+          اسم المستخدم أو كلمة المرور غير صحيحة!
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; background-color: #FFFFFF; color: #000000; font-weight: 700; border-radius: 8px; cursor: pointer; border: none; font-size: 14px;">🔓 تسجيل الدخول</button>
+      </form>
+    </div>
+  </div>
+
   <!-- Navigation Sidebar -->
   <aside class="sidebar">
     <div class="brand">
@@ -68,8 +100,9 @@
         </a>
       </li>
     </ul>
-    <div class="sidebar-footer">
-      <span>نظام إيفينت نكسس v2.0</span>
+    <div class="sidebar-footer" style="display: flex; flex-direction: column; gap: 8px; align-items: stretch; padding: 16px;">
+      <button id="btn-logout" class="btn btn-secondary btn-sm" style="width: 100%; text-align: center; border-color: var(--accent-danger); color: var(--accent-danger); font-weight: 600;">🔒 تسجيل الخروج</button>
+      <span style="font-size: 11px; text-align: center; color: var(--text-muted);">نظام Tokens ERP v2.0</span>
     </div>
   </aside>
 

@@ -1924,8 +1924,36 @@ function parseCSVAndImport(csvText) {
   alert('تم استيراد شيت التكاليف بنجاح وتحديث ميزانيات البنود والمعاملات المالية للحفلة!');
 }
 
+// --- AUTHENTICATION MODULE (6 Users / Passwords) ---
+const AUTH_KEY = 'tokens_erp_authenticated_user';
+const USERS_DB = [
+  { username: 'admin', password: 'admin123', role: 'مدير النظام' },
+  { username: 'owner', password: 'owner123', role: 'مالك الشركة' },
+  { username: 'operation', password: 'op123', role: 'مسؤول العمليات' },
+  { username: 'coordinator', password: 'coord123', role: 'منسق الحفلات' },
+  { username: 'accountant', password: 'acc123', role: 'المحاسب المالي' },
+  { username: 'guest', password: 'guest123', role: 'مستخدم زائر' }
+];
+
+function checkAuthentication() {
+  const sessionUser = sessionStorage.getItem(AUTH_KEY);
+  const loginScreen = document.getElementById('login-screen');
+  
+  if (sessionUser) {
+    if (loginScreen) loginScreen.style.display = 'none';
+    const avatar = document.querySelector('.avatar');
+    if (avatar) {
+      avatar.innerText = sessionUser.substring(0, 2).toUpperCase();
+      avatar.title = `مرحباً بك: ${sessionUser}`;
+    }
+  } else {
+    if (loginScreen) loginScreen.style.display = 'flex';
+  }
+}
+
 // App DOM Loaded Initializer
 document.addEventListener('DOMContentLoaded', () => {
+  checkAuthentication();
   loadERPState();
 
   // Set default dates
@@ -2160,6 +2188,38 @@ document.addEventListener('DOMContentLoaded', () => {
       renderDashboard();
       
       alert('تم تسجيل مصروف البند المالي وتحديث الميزانية التقديرية والفعلية بنجاح!');
+    });
+  }
+
+  // Bind Login Form Submission
+  const formLogin = document.getElementById('form-login');
+  if (formLogin) {
+    formLogin.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const uInput = document.getElementById('login-username').value.trim().toLowerCase();
+      const pInput = document.getElementById('login-password').value;
+      const errorMsg = document.getElementById('login-error-msg');
+      
+      const foundUser = USERS_DB.find(u => u.username === uInput && u.password === pInput);
+      if (foundUser) {
+        sessionStorage.setItem(AUTH_KEY, foundUser.username);
+        if (errorMsg) errorMsg.style.display = 'none';
+        formLogin.reset();
+        checkAuthentication();
+      } else {
+        if (errorMsg) errorMsg.style.display = 'block';
+      }
+    });
+  }
+
+  // Bind Logout Button Click
+  const btnLogout = document.getElementById('btn-logout');
+  if (btnLogout) {
+    btnLogout.addEventListener('click', () => {
+      if (confirm('هل أنت متأكد من رغبتك في تسجيل الخروج؟')) {
+        sessionStorage.removeItem(AUTH_KEY);
+        checkAuthentication();
+      }
     });
   }
 
