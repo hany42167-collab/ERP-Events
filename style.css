@@ -567,9 +567,9 @@ table {
 }
 
 th {
-  background-color: #F8FAFC;
-  color: var(--text-secondary);
-  font-weight: 600;
+  background-color: #FFFFFF;
+  color: #000000 !important;
+  font-weight: 700;
   padding: 16px 20px;
   border-bottom: 1px solid var(--border-color);
   font-size: 12px;
@@ -588,7 +588,7 @@ tr:last-child td {
 }
 
 tr:hover td {
-  background-color: #F8FAFC;
+  background-color: var(--bg-input);
 }
 
 /* Project progress gauge in tables */
@@ -657,7 +657,7 @@ tr:hover td {
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  background-color: #F8FAFC;
+  background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 8px;
   transition: var(--transition-smooth);
@@ -665,7 +665,7 @@ tr:hover td {
 
 .task-item:hover {
   border-color: var(--accent-primary);
-  background-color: #FFFFFF;
+  background-color: var(--bg-input);
 }
 
 .task-checkbox-container {
@@ -779,7 +779,7 @@ tr:hover td {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  background-color: #F8FAFC;
+  background-color: var(--bg-secondary);
 }
 
 /* Forms styling */
@@ -815,6 +815,11 @@ tr:hover td {
   outline: none;
   border-color: var(--accent-primary);
   box-shadow: 0 0 0 3px var(--border-glow);
+}
+
+select option {
+  background-color: #141414;
+  color: #FFFFFF;
 }
 
 /* Cost Sheets Layout */
