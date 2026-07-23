@@ -1,0 +1,43 @@
+﻿/* System Watermark overlay in background */
+.system-watermark {
+  position: fixed;
+  top: 50%;
+  left: calc(50% - 130px);
+  transform: translate(-50%, -50%) rotate(-12deg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.015;
+  user-select: none;
+}
+
+.watermark-logo {
+  font-family: 'Outfit', sans-serif;
+  font-size: 130px;
+  font-weight: 800;
+  letter-spacing: 12px;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.watermark-sub {
+  font-family: 'Outfit', sans-serif;
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: 16px;
+  color: #FFFFFF;
+  margin-top: 16px;
+  text-indent: 16px;
+}
+
+/* Adjust watermark positioning on mobile screens */
+@media (max-width: 768px) {
+  .system-watermark {
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-12deg) scale(0.6);
+  }
+}
+
